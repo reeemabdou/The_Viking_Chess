@@ -1,0 +1,75 @@
+def createBoard(size=9):
+    board = [['.' for i in range(size)] for i in range(size)]
+    mid = size // 2
+    board[mid][mid] = 'K'
+    for d in [1, 2]:
+        board[mid + d][mid] = 'D'
+        board[mid - d][mid] = 'D'
+        board[mid][mid + d] = 'D'
+        board[mid][mid - d] = 'D'
+
+    for dr in [-1, 1]:
+        for dc in [-1, 1]:
+            board[mid + dr][mid + dc] = 'D'
+
+    for i in range((mid//2)+1):
+            board[mid+i][0] = 'A'
+            board[mid+i][size-1] = 'A'
+            board[mid-i][0] = 'A'
+            board[mid-i][size-1] = 'A'
+            board[0][mid+i] = 'A'
+            board[size-1][mid+i] = 'A'
+            board[0][mid-i] = 'A'
+            board[size-1][mid-i] = 'A'
+            board[mid][1] = 'A'
+            board[1][mid] = 'A'
+            board[mid][size-2] = 'A'
+            board[size-2][mid] = 'A'
+    return board
+
+
+def printBoard(board):
+    for row in board:
+        print(' '.join(row))
+    print()
+
+def moveUp(board, player, c, r, steps):
+    board[r][c] = ''
+    board[r-steps][c] = player
+
+def moveDown(board, player, c, r, steps):
+    board[r][c] = ''
+    board[r+steps][c] = player
+
+def moveRight(board, player, c, r, steps):
+    board[r][c] = ''
+    board[r][c+steps] = player
+
+def moveLeft(board, player, c, r, steps):
+    board[r][c] = ''
+    board[r][c-steps] = player
+
+def moveRightUp(board, player, c, r, steps):
+    board[r][c] = ''
+    board[r-steps][c+steps] = player
+
+def moveRightDown(board, player, c, r, steps):
+    board[r][c] = ''
+    board[r+steps][c+steps] = player
+
+def moveLeftUp(board, player, c, r, steps):
+    board[r][c] = ''
+    board[r-steps][c-steps] = player
+
+def moveLeftDown(board, player, c, r, steps):
+    board[r][c] = ''
+    board[r+steps][c-steps] = player
+
+
+def main():
+    board = createBoard(9)
+    printBoard(board)
+
+
+if __name__ == "__main__":
+    main()
