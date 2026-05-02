@@ -1,4 +1,4 @@
-def createBoard(size=9):
+def createBoard(size=11):
     board = [['.' for i in range(size)] for i in range(size)]
     mid = size // 2
     board[mid][mid] = 'K'
@@ -33,26 +33,83 @@ def printBoard(board):
         print(' '.join(row))
     print()
 
-def moveUp(board, player, c, r, steps):
-    board[r][c] = ''
-    board[r-steps][c] = player
+# def moveUp(board, player, c, r, steps):
+#     board[r][c] = ''
+#     board[r-steps][c] = player
 
-def moveDown(board, player, c, r, steps):
-    board[r][c] = ''
-    board[r+steps][c] = player
+# def moveDown(board, player, c, r, steps):
+#     board[r][c] = ''
+#     board[r+steps][c] = player
 
-def moveRight(board, player, c, r, steps):
-    board[r][c] = ''
-    board[r][c+steps] = player
+# def moveRight(board, player, c, r, steps):
+#     board[r][c] = ''
+#     board[r][c+steps] = player
 
-def moveLeft(board, player, c, r, steps):
-    board[r][c] = ''
-    board[r][c-steps] = player
+# def moveLeft(board, player, c, r, steps):
+#     board[r][c] = ''
+#     board[r][c-steps] = player
+
+def make_move(board, r1, c1, r2, c2, player):
+    if not is_valid_move(board, r1, c1, r2, c2, player):
+        print("Invalid move!")
+        return False
+
+    board[r1][c1] = '.'
+    board[r2][c2] = player
+    return True
+
+def is_valid_move(board, r1, c1, r2, c2, player):
+    size = len(board)
+    corners = [(0,0), (0,size-1), (size-1,0), (size-1,size-1)]
+    
+    if(r2 < 0 or c2 < 0 or r2 >= size or c2 >= size):
+        return False
+    
+    if(r1 == r2 and c1 == c2):
+        return False
+    
+    if(r1 != r2 and c1 != c2):
+        return False
+    
+    if (r2, c2) in corners and player != 'K':
+        return False
+    
+    if r2 == size // 2 and c2 == size // 2 and player != 'K':
+        return False
+    
+    if board[r1][c1] != player:
+        return False
+
+    if board[r2][c2] != '.':
+        return False
+    
+    if r1 == r2:
+        step = 1 if c2 > c1 else -1
+        for c in range(c1 + step, c2, step):
+            if board[r1][c] != '.':
+                return False
+
+    else: 
+        step = 1 if r2 > r1 else -1
+        for r in range(r1 + step, r2, step):
+            if board[r][c1] != '.':
+                return False
+
+    return True
+
+
 
 def main():
-    board = createBoard(9)
+    board = createBoard()
     printBoard(board)
-
+    # print(board[4][4])
+    # print(is_valid_move(board, 4, 4, 4, 1, 'D'))
+    make_move(board, 4, 4, 4, 1, 'D')
+    printBoard(board)
+    make_move(board, 4, 1, 0, 1, 'D')
+    printBoard(board)
+    make_move(board, 0, 1, 0, 0, 'D')
+    printBoard(board)
 
 if __name__ == "__main__":
     main()
