@@ -49,23 +49,6 @@ def moveLeft(board, player, c, r, steps):
     board[r][c] = ''
     board[r][c-steps] = player
 
-def moveRightUp(board, player, c, r, steps):
-    board[r][c] = ''
-    board[r-steps][c+steps] = player
-
-def moveRightDown(board, player, c, r, steps):
-    board[r][c] = ''
-    board[r+steps][c+steps] = player
-
-def moveLeftUp(board, player, c, r, steps):
-    board[r][c] = ''
-    board[r-steps][c-steps] = player
-
-def moveLeftDown(board, player, c, r, steps):
-    board[r][c] = ''
-    board[r+steps][c-steps] = player
-
-
 def main():
     board = createBoard(9)
     printBoard(board)
