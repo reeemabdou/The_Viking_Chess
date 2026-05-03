@@ -98,6 +98,35 @@ def is_valid_move(board, r1, c1, r2, c2, player):
     return True
 
 
+def switch_turn(player):
+    return 'D' if player == 'A' else 'A'
+
+def get_player_move():
+    move = input("enter your move (r1 c1 r2 c2): ")
+    try:
+        r1, c1, r2, c2 = map(int, move.split())
+    except ValueError:
+        print("Invalid input format. Please enter four integers separated by spaces.")
+        return get_player_move()
+    return r1, c1, r2, c2
+
+
+def game_controller():
+    board = createBoard()
+    printBoard(board)
+    current_player = 'A'
+    while True:
+        r1, c1, r2, c2 = get_player_move()
+        if make_move(board, r1, c1, r2, c2, current_player):
+            printBoard(board)
+            #check for a win
+            current_player = switch_turn(current_player)
+        else:
+            print("Please try again.")
+
+    
+
+
 
 def main():
     board = createBoard()
