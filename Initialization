@@ -56,6 +56,8 @@ def make_move(board, r1, c1, r2, c2, player):
 
     board[r1][c1] = '.'
     board[r2][c2] = player
+
+    check_capture(board, r2, c2)
     return True
 
 def is_valid_move(board, r1, c1, r2, c2, player):
@@ -110,6 +112,77 @@ def get_player_move():
         return get_player_move()
     return r1, c1, r2, c2
 
+def find_king(board):
+    for r in range(len(board)):
+        for c in range(len(board[0])):
+            if board[r][c] == 'K':
+                return (r, c)
+    return None
+
+
+def check_capture(board, r, c):
+    player = board[r][c]
+    if player == '.' or player == 'K': 
+        return
+        
+    enemy = 'A' if player == 'D' else 'D'
+    directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+    size = len(board)
+    mid = size // 2
+    throne = (mid, mid)
+    corners = [(0, 0), (0, size-1), (size-1, 0), (size-1, size-1)]
+
+    for dr, dc in directions:
+        r1, c1 = r + dr, c + dc     
+        r2, c2 = r + 2*dr, c + 2*dc 
+
+        if 0 <= r1 < size and 0 <= c1 < size and 0 <= r2 < size and 0 <= c2 < size:
+            if board[r1][c1] == enemy:
+                if board[r2][c2] == player or (r2, c2) == throne or (r2, c2) in corners:
+                    board[r1][c1] = '.'
+
+def is_king_captured(board, r, c):
+    if board[r][c] != 'K': return False
+    
+    directions = [(1,0), (-1,0), (0,1), (0,-1)]
+    attackers_count = 0 
+    size = len(board)
+    
+  
+    in_corner = (r, c) in [(0,0), (0, size-1), (size-1, 0), (size-1, size-1)]
+    on_edge = (r == 0 or r == size-1 or c == 0 or c == size-1) and not in_corner
+
+    for dr, dc in directions:
+        nr, nc = r + dr, c + dc
+   
+        if 0 <= nr < size and 0 <= nc < size:
+            if board[nr][nc] == 'A':
+                attackers_count += 1
+
+    if in_corner:
+        return attackers_count == 2 
+    if on_edge:
+        return attackers_count == 3 
+    return attackers_count == 4              
+
+
+def check_winner(board):
+    size = len(board)
+    corners = [(0, 0), (0, size-1), (size-1, 0), (size-1, size-1)]
+    
+    king_pos = find_king(board) 
+    if king_pos is None:
+        return "Attacker Wins"
+
+    if king_pos in corners:
+        return "Defender Wins"
+        
+    if is_king_captured(board, king_pos[0], king_pos[1]):
+        return "Attacker Wins"
+        
+    return "Ongoing"
+
+
 
 def game_controller():
     board = createBoard()
@@ -119,15 +192,17 @@ def game_controller():
         r1, c1, r2, c2 = get_player_move()
         if make_move(board, r1, c1, r2, c2, current_player):
             printBoard(board)
-            #check for a win
+            # check for a win
+            status = check_winner(board)
+            if status != "Ongoing":
+                print(f"GAME OVER! Result: {status}")
+                break
+
             current_player = switch_turn(current_player)
         else:
             print("Please try again.")
 
     
-
-
-
 def main():
     board = createBoard()
     printBoard(board)
