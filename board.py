@@ -142,29 +142,28 @@ def check_capture(board, r, c):
                     board[r1][c1] = '.'
 
 def is_king_captured(board, r, c):
-    if board[r][c] != 'K': return False
-    
-    directions = [(1,0), (-1,0), (0,1), (0,-1)]
-    attackers_count = 0 
+    if board[r][c] != 'K':
+        return False
+
     size = len(board)
+    corners = [(0, 0), (0, size - 1), (size - 1, 0), (size - 1, size - 1)]
+    directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
     
-  
-    in_corner = (r, c) in [(0,0), (0, size-1), (size-1, 0), (size-1, size-1)]
-    on_edge = (r == 0 or r == size-1 or c == 0 or c == size-1) and not in_corner
+    blocked_sides = 0
 
     for dr, dc in directions:
         nr, nc = r + dr, c + dc
+
+        if not (0 <= nr < size and 0 <= nc < size):
+            blocked_sides += 1
    
-        if 0 <= nr < size and 0 <= nc < size:
-            if board[nr][nc] == 'A':
-                attackers_count += 1
+        elif (nr, nc) in corners:
+            blocked_sides += 1
 
-    if in_corner:
-        return attackers_count == 2 
-    if on_edge:
-        return attackers_count == 3 
-    return attackers_count == 4              
+        elif board[nr][nc] == 'A':
+            blocked_sides += 1
 
+    return blocked_sides == 4
 
 def check_winner(board):
     size = len(board)
