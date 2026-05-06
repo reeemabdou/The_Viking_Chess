@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import threading
 
-from board import createBoard, make_move, check_winner, switch_turn
+from board import createBoard, is_valid_move, make_move, check_winner, switch_turn
 from agent import minimax
 
 class TaflGUI:
@@ -74,11 +74,27 @@ class TaflGUI:
         
         self.canvas.bind("<Button-1>", self.on_canvas_click)
 
+    def get_moves_for_piece(self, r, c, piece):
+        moves = []
+        size = self.size
+        for rt in range(size):
+            if is_valid_move(self.board, r, c, rt, c, piece):
+               moves.append((rt, c))
+        for ct in range(size):
+            if is_valid_move(self.board, r, c, r, ct, piece):
+               moves.append((r, ct))
+        return moves
+    
     def draw_board(self):
         self.canvas.delete("all")
         corners = [(0, 0), (0, self.size-1), (self.size-1, 0), (self.size-1, self.size-1)]
         throne = (self.size // 2, self.size // 2)
-
+        valid_moves = []
+        if self.selected_cell:
+           sr, sc = self.selected_cell
+           piece = self.board[sr][sc]
+           valid_moves = self.get_moves_for_piece(sr, sc, piece)
+        
         for r in range(self.size):
             for c in range(self.size):
                 x0, y0 = c * self.cell_size, r * self.cell_size
@@ -91,6 +107,9 @@ class TaflGUI:
                 
                 if self.selected_cell == (r, c):
                     fill_color = "#98FB98"
+                
+                elif (r, c) in valid_moves:
+                    fill_color = "#90EE90"
 
                 self.canvas.create_rectangle(x0, y0, x1, y1, fill=fill_color, outline="#8B4513")
 
