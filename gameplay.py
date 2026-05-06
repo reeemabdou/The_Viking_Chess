@@ -13,7 +13,8 @@ def game_controller():
         human_side = input("Do you wanna be an Attacker (A) or Defender (D)? ").upper()
         ai_player = 'A' if human_side == 'D' else 'D'
         diff = input("Difficulty - 1 (Easy), 2 (Medium), 3 (Hard): ")
-        ai_depth = int(diff) if diff.isdigit() else 2
+        ai_depth = int(diff) if diff.isdigit() * 2 - 1 else 3
+
 
     printBoard(board)
     current_player = 'A'
