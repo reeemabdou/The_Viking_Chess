@@ -138,8 +138,25 @@ def check_capture(board, r, c):
 
         if 0 <= r1 < size and 0 <= c1 < size and 0 <= r2 < size and 0 <= c2 < size:
             if board[r1][c1] == enemy:
-                if board[r2][c2] == player or (r2, c2) == throne or (r2, c2) in corners:
-                    board[r1][c1] = '.'
+                
+                is_sandwiched = (board[r2][c2] == player)
+                
+                is_corner_capture = (r2, c2) in corners
+                
+                is_throne_capture = False
+                if (r2, c2) == throne:
+                    if player == 'D':
+                        is_throne_capture = True 
+                    
+                    else:
+                        if board[mid][mid] == '.':
+                            is_throne_capture = True
+                        else:
+                            is_throne_capture = False 
+
+                if is_sandwiched or is_corner_capture or is_throne_capture:
+                    if board[r1][c1] != 'K':
+                        board[r1][c1] = '.'
 
 def is_king_captured(board, r, c):
     if board[r][c] != 'K':
