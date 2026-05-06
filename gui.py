@@ -43,10 +43,14 @@ class TaflGUI:
                   command=lambda: self.start_game(ai=True, human_side='D', depth=1)).grid(row=0, column=0, padx=5, pady=5)
         tk.Button(ai_frame, text="Play as Defenders (Medium)", 
                   command=lambda: self.start_game(ai=True, human_side='D', depth=2)).grid(row=0, column=1, padx=5, pady=5)
+        tk.Button(ai_frame, text="Play as Defenders (Hard)", 
+                  command=lambda: self.start_game(ai=True, human_side='D', depth=3)).grid(row=0, column=2, padx=5, pady=5)
         tk.Button(ai_frame, text="Play as Attackers (Easy)", 
                   command=lambda: self.start_game(ai=True, human_side='A', depth=1)).grid(row=1, column=0, padx=5, pady=5)
         tk.Button(ai_frame, text="Play as Attackers (Medium)", 
                   command=lambda: self.start_game(ai=True, human_side='A', depth=2)).grid(row=1, column=1, padx=5, pady=5)
+        tk.Button(ai_frame, text="Play as Attackers (Hard)", 
+                  command=lambda: self.start_game(ai=True, human_side='A', depth=3)).grid(row=1, column=2, padx=5, pady=5)
 
     def start_game(self, ai, human_side='D', depth=2):
         self.play_ai = ai
